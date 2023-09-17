@@ -1,0 +1,29 @@
+YouTube ID <input id="inYt" value="0cs_wheBIvs"/>
+<button onclick="generate()">generate</button>
+<div style="height:10px;"></div>
+
+<div contenteditable="true">
+  <table border="1" data-type="yt-iframe-v2" cellpadding="0" cellspacing="0" style="width:-moz-available;width:-webkit-fill-available;width:fill-available;">
+    <tbody>
+      <tr style='background:black'>
+        <td class="td-img" style='display:flex;justify-content:center;'></td>
+      </tr>
+      <tr>
+        <td style='text-align:right;padding:4px 8px;' colspan='2'>
+          <span data-original-tag="yt-iframe-v2"><small>@pacolemon/yt-iframe-v2</small></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  
+  function generate() {
+    let $ = document.querySelector.bind(document);
+    let id = inYt.value.trim();
+    $('.td-img').innerHTML = `<img style="max-width:100%;" border="0" src="https://img.youtube.com/vi/${id}/hqdefault.jpg">`;
+    $('table').dataset.videoId = id
+  }
+  
+</script>
