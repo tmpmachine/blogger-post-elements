@@ -1,0 +1,193 @@
+<style>
+  table[data-type="yt-iframe-v2"] {
+    border: none;
+    position: relative;
+  }
+  table[data-type="yt-iframe-v2"].is-initialized img {
+    display: none;
+  }
+  table[data-type="yt-iframe-v2"].is-initialized .td-img {
+    border: 0;
+    padding-bottom: 56.25%;
+  }
+  table[data-type="yt-iframe-v2"] tr:nth-child(2) {
+    display: none;
+  }
+  table[data-type="yt-iframe-v2"] tr:nth-child(1) td:nth-child(1) {
+    display: none;
+  }
+  table[data-type="yt-iframe-v2"] tr:nth-child(1) td:nth-child(2) {
+      overflow: hidden;
+      display: block;
+      border: 0;
+      padding-top: 56.25%;
+      position: relative;
+  }
+  
+  table[data-type="yt-iframe-v2"] tr:nth-child(1){
+      display:block!Important;
+      text-align:center;
+      max-height:none!Important;
+  }
+  table[data-type="yt-iframe-v2"] iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width:100%;
+      border: 0;
+  }
+</style>
+<style>
+  .hidden{display:none}
+  .yt-icon svg {
+    width: 70px;
+  }
+  .yt-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    filter: grayscale(1);
+    cursor: pointer;
+  }
+  .yt-icon:hover {
+    filter: grayscale(0);
+  }
+  .yt-info {
+    text-align: center;
+    padding: 16px 0;
+    font-weight: bold;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    color: #fff;
+    opacity: 0.7;
+  }
+	.yt-info:before {
+    text-transform: uppercase;
+    font-family: sans-serif;
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+  .yt-thumbnail {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+  }
+  .mini-gradient {
+    height:100%;
+    top: 0;
+    width: 100%;
+    position: absolute;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==');
+    background-repeat: repeat-x;
+    background-size:contain;
+    -moz-transition: opacity .25s cubic-bezier(0.0,0.0,0.2,1);
+    -webkit-transition: opacity .25s cubic-bezier(0.0,0.0,0.2,1);
+    transition: opacity .25s cubic-bezier(0.0,0.0,0.2,1);
+    pointer-events: none;
+  }
+</style>
+<script>
+  function loadYoutubePlayer(self) {
+    let iframe = o.cel('iframe',{
+      src: 'https://www.youtube.com/embed/'+self.dataset.video,
+      style: 'position:absolute;top:0;left:0;width:100%;height:100%;',
+      frameborder: 0,
+      allowfullscreen: 'allowfullscreen',
+      mozallowfullscreen: 'mozallowfullscreen',
+      msallowfullscreen: 'msallowfullscreen',
+      oallowfullscreen: 'oallowfullscreen',
+      webkitallowfullscreen: 'webkitallowfullscreen'
+    });
+    self.innerHTML = '';
+    self.appendChild(iframe);
+  }
+</script>
+<script>
+//<![CDATA[
+(function() {
+  let $ = (selector, node = document) => node.querySelectorAll(selector);
+  let version = 2;
+  let baseVersion = Math.floor(version);
+  let templateId = `yt-iframe-v${baseVersion}`;
+  class CustomElement extends HTMLElement {
+    constructor() {
+      super();
+      this.rootTable = this.findRootTableNode();
+    }
+    
+    connectedCallback() {
+      this.init();
+    }
+    
+    init() {
+      let table = this.rootTable;
+      let thumbnail = $('img', table)[0];
+      this.videoId = table.dataset.videoId;
+      let fragment = document.createDocumentFragment();
+      let div = document.createElement('div');
+      div.innerHTML = `
+  <div class="_wrapper">
+    <div class="yt-thumbnail" style="background-attachment: initial; background-clip: initial; background-color: initial; background-origin: initial; background-position: 50% 50%; background-repeat: initial; background-size: cover; background: url('${thumbnail.src}') center center / cover;"></div>
+    <div class="mini-gradient"></div>
+    <div class="yt-icon">
+      <svg version="1.1" viewbox="0 0 68 48" width="45"><path class="ytp-large-play-button-bg" d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill-opacity="0.8" fill="red"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg>
+    </div>
+    <div class="yt-info"></div>
+  </div>`
+      fragment.append(div);
+      table.append(fragment);
+      let wrapper = $('._wrapper',table)[0];
+      this.wrapper = wrapper;
+      table.classList.add('is-initialized');
+      wrapper.addEventListener('click', () => {
+        this.loadPlayer();
+      })
+    }
+    
+    loadPlayer() {
+      let iframe = document.createElement('iframe');
+      let attributes = {
+        src: `https://www.youtube.com/embed/${this.videoId}`,
+        allowfullscreen: 'allowfullscreen',
+        mozallowfullscreen: 'mozallowfullscreen',
+        msallowfullscreen: 'msallowfullscreen',
+        oallowfullscreen: 'oallowfullscreen',
+        webkitallowfullscreen: 'webkitallowfullscreen'
+      };
+      for (let name in attributes) {
+        iframe.setAttribute(name, attributes[name]);
+      }
+      this.wrapper.innerHTML = '';
+      this.wrapper.appendChild(iframe);
+    }
+    
+    findRootTableNode() {
+      let node = this;
+      let retry = 5;
+      while (node.parentNode && retry > 0) {
+        if (node.dataset.type == `yt-iframe-v${baseVersion}`) {
+          return node;
+        }
+        node = node.parentNode;
+        retry--;
+      }
+      return null;
+    }
+    
+  }
+  window.requestAnimationFrame(() => {
+    customElements.define(templateId, CustomElement);
+  })
+})();
+//]]>
+</script>
